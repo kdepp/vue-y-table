@@ -54,7 +54,7 @@ if (process.env.NODE_ENV !== 'production') {
     entry: './src/table.vue',
     output: {
       path: path.resolve(__dirname, './dist'),
-      filename: 'tree.js',
+      filename: 'table.js',
       libraryTarget: 'umd',
       library: 'VueTree'
     },
@@ -79,11 +79,13 @@ if (process.env.NODE_ENV !== 'production') {
           NODE_ENV: '"production"'
         }
       }),
+      /*
       new webpack.optimize.UglifyJsPlugin({
         compress: {
           warnings: false
         }
       }),
+      */
       new webpack.optimize.OccurenceOrderPlugin()
     ]
   }
