@@ -31,6 +31,10 @@ const props = {
     type: String,
     default: ''
   },
+  isEditable: {
+    type: Boolean,
+    default: true
+  },
   update: {
     type: Function,
     default: function (opts) {
@@ -44,7 +48,7 @@ const inner = {
     <table :class="tableClass">
       <thead>
         <tr>
-          <td v-for="f in fields">{{f.label}}</td>
+          <th v-for="f in fields">{{f.label}}</th>
         </tr>
       </thead>
       <tbody>
@@ -56,6 +60,7 @@ const inner = {
               :col="f.key"
               :id="d[idCol]"
               :extra="{col: f.key, id: d[idCol]}"
+              :is-editable="isEditable"
               @update="update"
             ></component>
           </td>
