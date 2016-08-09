@@ -410,6 +410,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    type: String,
 	    default: ''
 	  },
+	  isEditable: {
+	    type: Boolean,
+	    default: true
+	  },
 	  update: {
 	    type: Function,
 	    default: function _default(opts) {
@@ -419,7 +423,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	var inner = {
-	  template: '\n    <table :class="tableClass">\n      <thead>\n        <tr>\n          <td v-for="f in fields">{{f.label}}</td>\n        </tr>\n      </thead>\n      <tbody>\n        <tr v-for="d in data">\n          <td v-for="f in fields">\n            <component\n              :is="tcomponents[f.key].cname"\n              :value="d[f.key]"\n              :col="f.key"\n              :id="d[idCol]"\n              :extra="{col: f.key, id: d[idCol]}"\n              @update="update"\n            ></component>\n          </td>\n        </tr>\n      </tbody>\n    </table>\n  ',
+	  template: '\n    <table :class="tableClass">\n      <thead>\n        <tr>\n          <th v-for="f in fields">{{f.label}}</th>\n        </tr>\n      </thead>\n      <tbody>\n        <tr v-for="d in data">\n          <td v-for="f in fields">\n            <component\n              :is="tcomponents[f.key].cname"\n              :value="d[f.key]"\n              :col="f.key"\n              :id="d[idCol]"\n              :extra="{col: f.key, id: d[idCol]}"\n              :is-editable="isEditable"\n              @update="update"\n            ></component>\n          </td>\n        </tr>\n      </tbody>\n    </table>\n  ',
 	  props: (0, _extends5.default)({}, props, {
 	    tcomponents: {
 	      type: Object,
