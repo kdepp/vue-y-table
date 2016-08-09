@@ -1,9 +1,11 @@
 <script>
 import Editable from './editable.vue';
 
-const plainText = {
-  template: "<span>{{value}}</span>",
-  props: ['value', 'id', 'col', 'update']
+var normalize = function (text) {
+  return text.split('').slice(1).reduce((prev, cur) => {
+    if (cur >= 'A' && cur <= 'Z') return prev + '-' + cur.toLowerCase();
+    else return prev + cur;
+  }, text.charAt(0));
 };
 
 const checkField = function (field) {
@@ -25,6 +27,10 @@ const props = {
     type: String,
     default: '_id'
   },
+  tableClass: {
+    type: String,
+    default: ''
+  },
   update: {
     type: Function,
     default: function (opts) {
@@ -35,7 +41,7 @@ const props = {
 
 const inner = {
   template: `
-    <table>
+    <table :class="tableClass">
       <thead>
         <tr>
           <td v-for="f in fields">{{f.label}}</td>
@@ -73,7 +79,13 @@ const inner = {
 
 const outer = {
   props,
-  template: '<div><x-inner :fields="fields" :tdata="tdata" :id-col="idCol" :tcomponents="tcomponents"></x-inner></div>',
+  template: (function () {
+    var propStr = Object.keys(props).concat(['tcomponents']).map(text => {
+      return `:${normalize(text)}="${text}"`;
+    }).join(' ');
+
+    return `<div><x-inner ${propStr}></x-inner></div>`
+  })(),
   components: {
     'x-inner': function (resolve) {
       let tcs = this.tcomponents;
@@ -102,7 +114,6 @@ const outer = {
           [cur.key]: {cname, component}
         };
       }, {});
-      console.log('tcomb: ', a);
       return a;
     }
   }
