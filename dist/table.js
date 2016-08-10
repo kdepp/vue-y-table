@@ -373,9 +373,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _keys2 = _interopRequireDefault(_keys);
 	
-	var _extends4 = __webpack_require__(7);
+	var _extends3 = __webpack_require__(7);
 	
-	var _extends5 = _interopRequireDefault(_extends4);
+	var _extends4 = _interopRequireDefault(_extends3);
 	
 	var _editable = __webpack_require__(52);
 	
@@ -423,10 +423,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	var inner = {
-	  template: '\n    <table :class="tableClass">\n      <thead>\n        <tr>\n          <th v-for="f in fields">{{f.label}}</th>\n        </tr>\n      </thead>\n      <tbody>\n        <tr v-for="d in data">\n          <td v-for="f in fields">\n            <component\n              :is="tcomponents[f.key].cname"\n              :value="d[f.key]"\n              :col="f.key"\n              :id="d[idCol]"\n              :extra="{col: f.key, id: d[idCol]}"\n              :is-editable="isEditable"\n              @update="update"\n            ></component>\n          </td>\n        </tr>\n      </tbody>\n    </table>\n  ',
-	  props: (0, _extends5.default)({}, props, {
+	  template: '\n    <table :class="tableClass">\n      <thead>\n        <tr>\n          <th v-for="f in fields">{{f.label}}</th>\n        </tr>\n      </thead>\n      <tbody>\n        <tr v-for="d in data">\n          <td v-for="f in fields">\n            <component\n              :is="tcomponents[$index].cname"\n              :value="d[f.key]"\n              :col="f.key"\n              :id="d[idCol]"\n              :extra="{col: f.key, id: d[idCol]}"\n              :is-editable="isEditable"\n              @update="update"\n            ></component>\n          </td>\n        </tr>\n      </tbody>\n    </table>\n  ',
+	  props: (0, _extends4.default)({}, props, {
 	    tcomponents: {
-	      type: Object,
+	      type: Array,
 	      required: true
 	    }
 	  }),
@@ -449,16 +449,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	  components: {
 	    'x-inner': function xInner(resolve) {
 	      var tcs = this.tcomponents;
-	      var components = (0, _keys2.default)(tcs).reduce(function (prev, cur) {
-	        return (0, _extends5.default)({}, prev, (0, _defineProperty3.default)({}, tcs[cur].cname, tcs[cur].component));
+	      var components = tcs.reduce(function (prev, cur) {
+	        return (0, _extends4.default)({}, prev, (0, _defineProperty3.default)({}, cur.cname, cur.component));
 	      }, {});
 	
-	      resolve((0, _extends5.default)({}, inner, { components: components }));
+	      resolve((0, _extends4.default)({}, inner, { components: components }));
 	    }
 	  },
 	  computed: {
 	    tcomponents: function tcomponents() {
-	      var a = this.fields.reduce(function (prev, cur) {
+	      return this.fields.map(function (cur) {
 	        var cname, component;
 	
 	        if (cur.componentName && cur.component) {
@@ -469,9 +469,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          component = _editable2.default;
 	        }
 	
-	        return (0, _extends5.default)({}, prev, (0, _defineProperty3.default)({}, cur.key, { cname: cname, component: component }));
-	      }, {});
-	      return a;
+	        return { cname: cname, component: component };
+	      });
 	    }
 	  }
 	};
