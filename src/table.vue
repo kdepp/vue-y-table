@@ -55,7 +55,7 @@ const inner = {
         <tr v-for="d in data">
           <td v-for="f in fields">
             <component
-              :is="tcomponents[f.key].cname"
+              :is="tcomponents[$index].cname"
               :value="d[f.key]"
               :col="f.key"
               :id="d[idCol]"
@@ -71,7 +71,7 @@ const inner = {
   props: {
     ...props,
     tcomponents: {
-      type: Object,
+      type: Array,
       required: true
     }
   },
@@ -94,8 +94,8 @@ const outer = {
   components: {
     'x-inner': function (resolve) {
       let tcs = this.tcomponents;
-      let components = Object.keys(tcs).reduce((prev, cur) => {
-        return {...prev, [tcs[cur].cname]: tcs[cur].component};
+      let components = tcs.reduce((prev, cur) => {
+        return {...prev, [cur.cname]: cur.component};
       }, {});
 
       resolve({...inner, components});
@@ -103,7 +103,7 @@ const outer = {
   },
   computed: {
     tcomponents: function () {
-      let a = this.fields.reduce((prev, cur) => {
+      return this.fields.map(cur => {
         var cname, component;
 
         if (cur.componentName && cur.component) {
@@ -114,12 +114,8 @@ const outer = {
           component = Editable;
         }
 
-        return {
-          ...prev,
-          [cur.key]: {cname, component}
-        };
-      }, {});
-      return a;
+        return {cname, component};
+      });
     }
   }
 }
