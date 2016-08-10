@@ -18,6 +18,7 @@ export default {
   data: () => ({
     fields: [
       {key: 'first', label: '名', componentName: 'red-text', component: redText},
+      {key: 'first', label: 'first name'},
       {key: 'sur',   label: '姓'}
     ],
     tdata: [
