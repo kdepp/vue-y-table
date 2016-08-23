@@ -54,18 +54,125 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(16)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] src/table.vue: named exports in *.vue files are ignored.")}
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _defineProperty2 = __webpack_require__(19);
+	
+	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+	
+	var _keys = __webpack_require__(18);
+	
+	var _keys2 = _interopRequireDefault(_keys);
+	
+	var _extends3 = __webpack_require__(7);
+	
+	var _extends4 = _interopRequireDefault(_extends3);
+	
+	var _editable = __webpack_require__(51);
+	
+	var _editable2 = _interopRequireDefault(_editable);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var normalize = function normalize(text) {
+	  return text.split('').slice(1).reduce(function (prev, cur) {
+	    if (cur >= 'A' && cur <= 'Z') return prev + '-' + cur.toLowerCase();else return prev + cur;
+	  }, text.charAt(0));
+	};
+	
+	var checkField = function checkField(field) {
+	  return field && field.key;
+	};
+	
+	var props = {
+	  fields: {
+	    type: Array,
+	    required: true
+	  },
+	  tdata: {
+	    type: [Array, Function],
+	    required: true
+	  },
+	  idCol: {
+	    type: String,
+	    default: '_id'
+	  },
+	  tableClass: {
+	    type: String,
+	    default: ''
+	  },
+	  isEditable: {
+	    type: Boolean,
+	    default: true
+	  },
+	  update: {
+	    type: Function,
+	    default: function _default(opts) {
+	      console.log('onUpdate', opts);
+	    }
+	  }
+	};
+	
+	var inner = {
+	  template: '\n    <table :class="tableClass">\n      <thead>\n        <tr>\n          <th v-for="f in fields">{{f.label}}</th>\n        </tr>\n      </thead>\n      <tbody>\n        <tr v-for="d in data">\n          <td v-for="f in fields">\n            <component\n              :is="tcomponents[$index].cname"\n              :value="d[f.key]"\n              :col="f.key"\n              :id="d[idCol]"\n              :extra="{col: f.key, id: d[idCol]}"\n              :is-editable="isEditable"\n              @update="update"\n            ></component>\n          </td>\n        </tr>\n      </tbody>\n    </table>\n  ',
+	  props: (0, _extends4.default)({}, props, {
+	    tcomponents: {
+	      type: Array,
+	      required: true
+	    }
+	  }),
+	  computed: {
+	    data: function data() {
+	      return this.tdata;
+	    }
+	  }
+	};
+	
+	var outer = function outer() {
+	  return {
+	    props: (0, _extends4.default)({}, props),
+	    template: function () {
+	      var propStr = (0, _keys2.default)(props).concat(['tcomponents']).map(function (text) {
+	        return ':' + normalize(text) + '="' + text + '"';
+	      }).join(' ');
+	
+	      return '<div><x-inner ' + propStr + '></x-inner></div>';
+	    }(),
+	    components: {
+	      'x-inner': function xInner(resolve) {
+	        var tcs = this.tcomponents;
+	        var components = tcs.reduce(function (prev, cur) {
+	          return (0, _extends4.default)({}, prev, (0, _defineProperty3.default)({}, cur.cname, cur.component));
+	        }, {});
+	
+	        resolve((0, _extends4.default)({}, inner, { components: components }));
+	      }
+	    },
+	    computed: {
+	      tcomponents: function tcomponents() {
+	        return this.fields.map(function (cur) {
+	          var cname, component;
+	
+	          if (cur.componentName && cur.component) {
+	            cname = cur.componentName;
+	            component = cur.component;
+	          } else {
+	            cname = 'x-plain-editable';
+	            component = _editable2.default;
+	          }
+	
+	          return { cname: cname, component: component };
+	        });
+	      }
+	    }
+	  };
+	};
+	
+	exports.default = outer;
 
 /***/ },
 /* 1 */
@@ -101,8 +208,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var global    = __webpack_require__(5)
 	  , core      = __webpack_require__(1)
-	  , ctx       = __webpack_require__(28)
-	  , hide      = __webpack_require__(32)
+	  , ctx       = __webpack_require__(27)
+	  , hide      = __webpack_require__(31)
 	  , PROTOTYPE = 'prototype';
 	
 	var $export = function(type, name, source){
@@ -186,7 +293,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	exports.__esModule = true;
 	
-	var _assign = __webpack_require__(17);
+	var _assign = __webpack_require__(16);
 	
 	var _assign2 = _interopRequireDefault(_assign);
 	
@@ -221,7 +328,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	// fallback for non-array-like ES3 and non-enumerable old V8 strings
-	var cof = __webpack_require__(27);
+	var cof = __webpack_require__(26);
 	module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
 	  return cof(it) == 'String' ? it.split('') : Object(it);
 	};
@@ -230,9 +337,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var anObject       = __webpack_require__(25)
-	  , IE8_DOM_DEFINE = __webpack_require__(33)
-	  , toPrimitive    = __webpack_require__(44)
+	var anObject       = __webpack_require__(24)
+	  , IE8_DOM_DEFINE = __webpack_require__(32)
+	  , toPrimitive    = __webpack_require__(43)
 	  , dP             = Object.defineProperty;
 	
 	exports.f = __webpack_require__(2) ? Object.defineProperty : function defineProperty(O, P, Attributes){
@@ -252,8 +359,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.2.14 / 15.2.3.14 Object.keys(O)
-	var $keys       = __webpack_require__(36)
-	  , enumBugKeys = __webpack_require__(30);
+	var $keys       = __webpack_require__(35)
+	  , enumBugKeys = __webpack_require__(29);
 	
 	module.exports = Object.keys || function keys(O){
 	  return $keys(O, enumBugKeys);
@@ -359,123 +466,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _defineProperty2 = __webpack_require__(20);
-	
-	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
-	
-	var _keys = __webpack_require__(19);
-	
-	var _keys2 = _interopRequireDefault(_keys);
-	
-	var _extends3 = __webpack_require__(7);
-	
-	var _extends4 = _interopRequireDefault(_extends3);
-	
-	var _editable = __webpack_require__(52);
-	
-	var _editable2 = _interopRequireDefault(_editable);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var normalize = function normalize(text) {
-	  return text.split('').slice(1).reduce(function (prev, cur) {
-	    if (cur >= 'A' && cur <= 'Z') return prev + '-' + cur.toLowerCase();else return prev + cur;
-	  }, text.charAt(0));
-	};
-	
-	var checkField = function checkField(field) {
-	  return field && field.key;
-	};
-	
-	var props = {
-	  fields: {
-	    type: Array,
-	    required: true
-	  },
-	  tdata: {
-	    type: [Array, Function],
-	    required: true
-	  },
-	  idCol: {
-	    type: String,
-	    default: '_id'
-	  },
-	  tableClass: {
-	    type: String,
-	    default: ''
-	  },
-	  isEditable: {
-	    type: Boolean,
-	    default: true
-	  },
-	  update: {
-	    type: Function,
-	    default: function _default(opts) {
-	      console.log('onUpdate', opts);
-	    }
-	  }
-	};
-	
-	var inner = {
-	  template: '\n    <table :class="tableClass">\n      <thead>\n        <tr>\n          <th v-for="f in fields">{{f.label}}</th>\n        </tr>\n      </thead>\n      <tbody>\n        <tr v-for="d in data">\n          <td v-for="f in fields">\n            <component\n              :is="tcomponents[$index].cname"\n              :value="d[f.key]"\n              :col="f.key"\n              :id="d[idCol]"\n              :extra="{col: f.key, id: d[idCol]}"\n              :is-editable="isEditable"\n              @update="update"\n            ></component>\n          </td>\n        </tr>\n      </tbody>\n    </table>\n  ',
-	  props: (0, _extends4.default)({}, props, {
-	    tcomponents: {
-	      type: Array,
-	      required: true
-	    }
-	  }),
-	  computed: {
-	    data: function data() {
-	      return this.tdata;
-	    }
-	  }
-	};
-	
-	var outer = {
-	  props: props,
-	  template: function () {
-	    var propStr = (0, _keys2.default)(props).concat(['tcomponents']).map(function (text) {
-	      return ':' + normalize(text) + '="' + text + '"';
-	    }).join(' ');
-	
-	    return '<div><x-inner ' + propStr + '></x-inner></div>';
-	  }(),
-	  components: {
-	    'x-inner': function xInner(resolve) {
-	      var tcs = this.tcomponents;
-	      var components = tcs.reduce(function (prev, cur) {
-	        return (0, _extends4.default)({}, prev, (0, _defineProperty3.default)({}, cur.cname, cur.component));
-	      }, {});
-	
-	      resolve((0, _extends4.default)({}, inner, { components: components }));
-	    }
-	  },
-	  computed: {
-	    tcomponents: function tcomponents() {
-	      return this.fields.map(function (cur) {
-	        var cname, component;
-	
-	        if (cur.componentName && cur.component) {
-	          cname = cur.componentName;
-	          component = cur.component;
-	        } else {
-	          cname = 'x-plain-editable';
-	          component = _editable2.default;
-	        }
-	
-	        return { cname: cname, component: component };
-	      });
-	    }
-	  }
-	};
-	
-	exports.default = outer;
+	module.exports = { "default": __webpack_require__(20), __esModule: true };
 
 /***/ },
 /* 17 */
@@ -493,17 +484,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(23), __esModule: true };
-
-/***/ },
-/* 20 */
-/***/ function(module, exports, __webpack_require__) {
-
 	"use strict";
 	
 	exports.__esModule = true;
 	
-	var _defineProperty = __webpack_require__(18);
+	var _defineProperty = __webpack_require__(17);
 	
 	var _defineProperty2 = _interopRequireDefault(_defineProperty);
 	
@@ -525,31 +510,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(45);
+	module.exports = __webpack_require__(1).Object.assign;
+
+/***/ },
 /* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(46);
-	module.exports = __webpack_require__(1).Object.assign;
-
-/***/ },
-/* 22 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(47);
 	var $Object = __webpack_require__(1).Object;
 	module.exports = function defineProperty(it, key, desc){
 	  return $Object.defineProperty(it, key, desc);
 	};
 
 /***/ },
-/* 23 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(48);
+	__webpack_require__(47);
 	module.exports = __webpack_require__(1).Object.keys;
 
 /***/ },
-/* 24 */
+/* 23 */
 /***/ function(module, exports) {
 
 	module.exports = function(it){
@@ -558,7 +543,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 25 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var isObject = __webpack_require__(6);
@@ -568,14 +553,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 26 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// false -> Array#indexOf
 	// true  -> Array#includes
 	var toIObject = __webpack_require__(13)
-	  , toLength  = __webpack_require__(43)
-	  , toIndex   = __webpack_require__(42);
+	  , toLength  = __webpack_require__(42)
+	  , toIndex   = __webpack_require__(41);
 	module.exports = function(IS_INCLUDES){
 	  return function($this, el, fromIndex){
 	    var O      = toIObject($this)
@@ -594,7 +579,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 27 */
+/* 26 */
 /***/ function(module, exports) {
 
 	var toString = {}.toString;
@@ -604,11 +589,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 28 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// optional / simple context binding
-	var aFunction = __webpack_require__(24);
+	var aFunction = __webpack_require__(23);
 	module.exports = function(fn, that, length){
 	  aFunction(fn);
 	  if(that === undefined)return fn;
@@ -629,7 +614,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 29 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var isObject = __webpack_require__(6)
@@ -641,7 +626,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 30 */
+/* 29 */
 /***/ function(module, exports) {
 
 	// IE 8- don't enum bug keys
@@ -650,7 +635,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	).split(',');
 
 /***/ },
-/* 31 */
+/* 30 */
 /***/ function(module, exports) {
 
 	var hasOwnProperty = {}.hasOwnProperty;
@@ -659,11 +644,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 32 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var dP         = __webpack_require__(10)
-	  , createDesc = __webpack_require__(39);
+	  , createDesc = __webpack_require__(38);
 	module.exports = __webpack_require__(2) ? function(object, key, value){
 	  return dP.f(object, key, createDesc(1, value));
 	} : function(object, key, value){
@@ -672,22 +657,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 33 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = !__webpack_require__(2) && !__webpack_require__(3)(function(){
-	  return Object.defineProperty(__webpack_require__(29)('div'), 'a', {get: function(){ return 7; }}).a != 7;
+	  return Object.defineProperty(__webpack_require__(28)('div'), 'a', {get: function(){ return 7; }}).a != 7;
 	});
 
 /***/ },
-/* 34 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	// 19.1.2.1 Object.assign(target, source, ...)
 	var getKeys  = __webpack_require__(11)
-	  , gOPS     = __webpack_require__(35)
-	  , pIE      = __webpack_require__(37)
+	  , gOPS     = __webpack_require__(34)
+	  , pIE      = __webpack_require__(36)
 	  , toObject = __webpack_require__(14)
 	  , IObject  = __webpack_require__(9)
 	  , $assign  = Object.assign;
@@ -718,19 +703,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	} : $assign;
 
 /***/ },
-/* 35 */
+/* 34 */
 /***/ function(module, exports) {
 
 	exports.f = Object.getOwnPropertySymbols;
 
 /***/ },
-/* 36 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var has          = __webpack_require__(31)
+	var has          = __webpack_require__(30)
 	  , toIObject    = __webpack_require__(13)
-	  , arrayIndexOf = __webpack_require__(26)(false)
-	  , IE_PROTO     = __webpack_require__(40)('IE_PROTO');
+	  , arrayIndexOf = __webpack_require__(25)(false)
+	  , IE_PROTO     = __webpack_require__(39)('IE_PROTO');
 	
 	module.exports = function(object, names){
 	  var O      = toIObject(object)
@@ -746,13 +731,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 37 */
+/* 36 */
 /***/ function(module, exports) {
 
 	exports.f = {}.propertyIsEnumerable;
 
 /***/ },
-/* 38 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// most Object methods by ES6 should accept primitives
@@ -767,7 +752,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 39 */
+/* 38 */
 /***/ function(module, exports) {
 
 	module.exports = function(bitmap, value){
@@ -780,17 +765,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 40 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var shared = __webpack_require__(41)('keys')
-	  , uid    = __webpack_require__(45);
+	var shared = __webpack_require__(40)('keys')
+	  , uid    = __webpack_require__(44);
 	module.exports = function(key){
 	  return shared[key] || (shared[key] = uid(key));
 	};
 
 /***/ },
-/* 41 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var global = __webpack_require__(5)
@@ -801,7 +786,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 42 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var toInteger = __webpack_require__(12)
@@ -813,7 +798,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 43 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.1.15 ToLength
@@ -824,7 +809,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 44 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.1.1 ToPrimitive(input [, PreferredType])
@@ -841,7 +826,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 45 */
+/* 44 */
 /***/ function(module, exports) {
 
 	var id = 0
@@ -851,16 +836,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 46 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.3.1 Object.assign(target, source)
 	var $export = __webpack_require__(4);
 	
-	$export($export.S + $export.F, 'Object', {assign: __webpack_require__(34)});
+	$export($export.S + $export.F, 'Object', {assign: __webpack_require__(33)});
 
 /***/ },
-/* 47 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var $export = __webpack_require__(4);
@@ -868,24 +853,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	$export($export.S + $export.F * !__webpack_require__(2), 'Object', {defineProperty: __webpack_require__(10).f});
 
 /***/ },
-/* 48 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.2.14 Object.keys(O)
 	var toObject = __webpack_require__(14)
 	  , $keys    = __webpack_require__(11);
 	
-	__webpack_require__(38)('keys', function(){
+	__webpack_require__(37)('keys', function(){
 	  return function keys(it){
 	    return $keys(toObject(it));
 	  };
 	});
 
 /***/ },
-/* 49 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(50)();
+	exports = module.exports = __webpack_require__(49)();
 	// imports
 	
 	
@@ -896,7 +881,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 50 */
+/* 49 */
 /***/ function(module, exports) {
 
 	/*
@@ -952,23 +937,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 51 */
+/* 50 */
 /***/ function(module, exports) {
 
 	module.exports = "\n\n\n\n\n\n<div>\n  <input type=\"text\" v-show='isEditable && isEditing' :placeholder='input_placeholder' v-model='value' lazy\n        v-on:keyup.esc=\"onUpdate\" v-on:keyup.enter=\"onUpdate\"/>\n  <span v-on:click=\"onEdit\" v-show='!(isEditable && isEditing)' >\n    <span v-if='value && value.length'>{{value}}</span>\n    <span v-else>{{text_placeholder}}</span>\n  </span>\n</div>\n\n";
 
 /***/ },
-/* 52 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__webpack_require__(54)
+	__webpack_require__(53)
 	__vue_script__ = __webpack_require__(15)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] src/editable.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(51)
+	__vue_template__ = __webpack_require__(50)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -977,7 +962,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 53 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -1199,16 +1184,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 54 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(49);
+	var content = __webpack_require__(48);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(53)(content, {});
+	var update = __webpack_require__(52)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
