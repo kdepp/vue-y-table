@@ -1,4 +1,3 @@
-<script>
 import Editable from './editable.vue';
 
 var normalize = function (text) {
@@ -82,8 +81,8 @@ const inner = {
   }
 };
 
-const outer = {
-  props,
+const outer = () => ({
+  props: {...props},
   template: (function () {
     var propStr = Object.keys(props).concat(['tcomponents']).map(text => {
       return `:${normalize(text)}="${text}"`;
@@ -118,7 +117,6 @@ const outer = {
       });
     }
   }
-}
+});
 
 export default outer;
-</script>

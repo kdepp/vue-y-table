@@ -51,7 +51,7 @@ if (process.env.NODE_ENV !== 'production') {
 } else {
 
   module.exports = {
-    entry: './src/table.vue',
+    entry: './src/table.js',
     output: {
       path: path.resolve(__dirname, './dist'),
       filename: 'table.js',

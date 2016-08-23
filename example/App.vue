@@ -9,6 +9,8 @@
 </template>
 
 <script>
+import Table from '../src/table';
+
 const redText = {
   template: '<span style="color: red">{{value}}</span>',
   props: ['value', 'id', 'col']
@@ -29,7 +31,7 @@ export default {
   }),
 
   components: {
-    'y-table': require('../src/table.vue')
+    'y-table': Table()
   }
 }
 </script>
