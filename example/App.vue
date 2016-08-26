@@ -12,14 +12,32 @@
 import Table from '../src/table';
 
 const redText = {
-  template: '<span style="color: red">{{value}}</span>',
-  props: ['value', 'id', 'col']
+  template: '<span style="color: red" @click="onClick">{{value}}</span>',
+  props: ['value', 'id', 'col', 'options'],
+  computed: {
+    onClick: function () {
+      return (
+        (this.options || {}).onClick
+        || function () { alert(self.value) }
+      ).bind(this);
+    }
+  }
 };
 
 export default {
   data: () => ({
     fields: [
-      {key: 'first', label: '名', componentName: 'red-text', component: redText},
+      {
+        key: 'first',
+        label: '名',
+        componentName: 'red-text',
+        component: redText,
+        options: {
+          onClick: function () {
+            console.log(this.value);
+          }
+        }
+      },
       {key: 'first', label: 'first name'},
       {key: 'sur',   label: '姓'}
     ],
