@@ -55,6 +55,7 @@ const inner = {
           <td v-for="f in fields">
             <component
               :is="tcomponents[$index].cname"
+              :options="tcomponents[$index].options"
               :value="d[f.key]"
               :col="f.key"
               :id="d[idCol]"
@@ -113,7 +114,10 @@ const outer = () => ({
           component = Editable;
         }
 
-        return {cname, component};
+        return {
+          options: cur.options,
+          cname, component
+        };
       });
     }
   }
