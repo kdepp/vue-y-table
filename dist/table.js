@@ -118,7 +118,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	var inner = {
-	  template: '\n    <table :class="tableClass">\n      <thead>\n        <tr>\n          <th v-for="f in fields">{{f.label}}</th>\n        </tr>\n      </thead>\n      <tbody>\n        <tr v-for="d in data">\n          <td v-for="f in fields">\n            <component\n              :is="tcomponents[$index].cname"\n              :options="tcomponents[$index].options"\n              :value="d[f.key]"\n              :col="f.key"\n              :id="d[idCol]"\n              :extra="{col: f.key, id: d[idCol]}"\n              :is-editable="isEditable"\n              @update="update"\n            ></component>\n          </td>\n        </tr>\n      </tbody>\n    </table>\n  ',
+	  template: '\n    <table :class="tableClass">\n      <thead>\n        <tr>\n          <th v-for="f in fields">{{f.label}}</th>\n        </tr>\n      </thead>\n      <tbody>\n        <tr v-for="d in data">\n          <td v-for="f in fields">\n            <component\n              :is="tcomponents[$index].cname"\n              :options="tcomponents[$index].options"\n              :value="d[f.key] || \'\'"\n              :col="f.key"\n              :id="d[idCol]"\n              :extra="{col: f.key, id: d[idCol]}"\n              :is-editable="isEditable"\n              @update="update"\n            ></component>\n          </td>\n        </tr>\n      </tbody>\n    </table>\n  ',
 	  props: (0, _extends4.default)({}, props, {
 	    tcomponents: {
 	      type: Array,
@@ -132,7 +132,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	};
 	
+	var innerUid = 0;
+	
 	var outer = function outer() {
+	  var innerName = 'x-inner-' + innerUid++;
+	
 	  return {
 	    props: (0, _extends4.default)({}, props),
 	    template: function () {
@@ -140,18 +144,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return ':' + normalize(text) + '="' + text + '"';
 	      }).join(' ');
 	
-	      return '<div><x-inner ' + propStr + '></x-inner></div>';
+	      return '<div><' + innerName + ' ' + propStr + '></' + innerName + '></div>';
 	    }(),
-	    components: {
-	      'x-inner': function xInner(resolve) {
-	        var tcs = this.tcomponents;
-	        var components = tcs.reduce(function (prev, cur) {
-	          return (0, _extends4.default)({}, prev, (0, _defineProperty3.default)({}, cur.cname, cur.component));
-	        }, {});
+	    components: (0, _defineProperty3.default)({}, innerName, function (resolve) {
+	      var tcs = this.tcomponents;
+	      var components = tcs.reduce(function (prev, cur) {
+	        return (0, _extends4.default)({}, prev, (0, _defineProperty3.default)({}, cur.cname, cur.component));
+	      }, {});
 	
-	        resolve((0, _extends4.default)({}, inner, { components: components }));
-	      }
-	    },
+	      resolve((0, _extends4.default)({}, inner, { components: components }));
+	    }),
 	    computed: {
 	      tcomponents: function tcomponents() {
 	        return this.fields.map(function (cur) {
