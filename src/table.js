@@ -56,7 +56,7 @@ const inner = {
             <component
               :is="tcomponents[$index].cname"
               :options="tcomponents[$index].options"
-              :value="d[f.key]"
+              :value="d[f.key] || ''"
               :col="f.key"
               :id="d[idCol]"
               :extra="{col: f.key, id: d[idCol]}"
@@ -82,45 +82,51 @@ const inner = {
   }
 };
 
-const outer = () => ({
-  props: {...props},
-  template: (function () {
-    var propStr = Object.keys(props).concat(['tcomponents']).map(text => {
-      return `:${normalize(text)}="${text}"`;
-    }).join(' ');
+let innerUid = 0;
 
-    return `<div><x-inner ${propStr}></x-inner></div>`
-  })(),
-  components: {
-    'x-inner': function (resolve) {
-      let tcs = this.tcomponents;
-      let components = tcs.reduce((prev, cur) => {
-        return {...prev, [cur.cname]: cur.component};
-      }, {});
+const outer = () => {
+  var innerName = 'x-inner-' + (innerUid ++);
 
-      resolve({...inner, components});
+  return {
+    props: {...props},
+    template: (function () {
+      var propStr = Object.keys(props).concat(['tcomponents']).map(text => {
+        return `:${normalize(text)}="${text}"`;
+      }).join(' ');
+
+      return `<div><${innerName} ${propStr}></${innerName}></div>`
+    })(),
+    components: {
+      [innerName]: function (resolve) {
+        let tcs = this.tcomponents;
+        let components = tcs.reduce((prev, cur) => {
+          return {...prev, [cur.cname]: cur.component};
+        }, {});
+
+        resolve({...inner, components});
+      }
+    },
+    computed: {
+      tcomponents: function () {
+        return this.fields.map(cur => {
+          var cname, component;
+
+          if (cur.componentName && cur.component) {
+            cname = cur.componentName;
+            component = cur.component;
+          } else {
+            cname = 'x-plain-editable';
+            component = Editable;
+          }
+
+          return {
+            options: cur.options,
+            cname, component
+          };
+        });
+      }
     }
-  },
-  computed: {
-    tcomponents: function () {
-      return this.fields.map(cur => {
-        var cname, component;
-
-        if (cur.componentName && cur.component) {
-          cname = cur.componentName;
-          component = cur.component;
-        } else {
-          cname = 'x-plain-editable';
-          component = Editable;
-        }
-
-        return {
-          options: cur.options,
-          cname, component
-        };
-      });
-    }
-  }
-});
+  };
+};
 
 export default outer;
