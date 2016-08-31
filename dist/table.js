@@ -118,7 +118,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	var inner = {
-	  template: '\n    <table :class="tableClass">\n      <thead>\n        <tr>\n          <th v-for="f in fields">{{f.label}}</th>\n        </tr>\n      </thead>\n      <tbody>\n        <tr v-for="d in data">\n          <td v-for="f in fields">\n            <component\n              :is="tcomponents[$index].cname"\n              :options="tcomponents[$index].options"\n              :value="d[f.key] || \'\'"\n              :col="f.key"\n              :id="d[idCol]"\n              :extra="{col: f.key, id: d[idCol]}"\n              :is-editable="isEditable"\n              @update="update"\n            ></component>\n          </td>\n        </tr>\n      </tbody>\n    </table>\n  ',
+	  template: '\n    <table :class="tableClass">\n      <thead>\n        <tr>\n          <th v-for="f in fields" :style="f.style || {}">{{f.label}}</th>\n        </tr>\n      </thead>\n      <tbody>\n        <tr v-for="d in data">\n          <td v-for="f in fields" :style="f.style || {}">\n            <component\n              :is="tcomponents[$index].cname"\n              :options="tcomponents[$index].options"\n              :value="d[f.key] || \'\'"\n              :col="f.key"\n              :id="d[idCol]"\n              :extra="{col: f.key, id: d[idCol]}"\n              :is-editable="isEditable"\n              @update="update"\n            ></component>\n          </td>\n        </tr>\n      </tbody>\n    </table>\n  ',
 	  props: (0, _extends4.default)({}, props, {
 	    tcomponents: {
 	      type: Array,
@@ -945,7 +945,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 50 */
 /***/ function(module, exports) {
 
-	module.exports = "\n\n\n\n\n\n<div>\n  <input type=\"text\" v-show='isEditable && isEditing' :placeholder='input_placeholder' v-model='value' lazy\n        v-on:keyup.esc=\"onUpdate\" v-on:keyup.enter=\"onUpdate\"/>\n  <span v-on:click=\"onEdit\" v-show='!(isEditable && isEditing)' >\n    <span v-if='value && value.length'>{{value}}</span>\n    <span v-else>{{text_placeholder}}</span>\n  </span>\n</div>\n\n";
+	module.exports = "\n\n\n\n\n\n<div>\n  <input type=\"text\" v-show='isEditable && isEditing' :placeholder='input_placeholder' v-model='value' lazy\n        v-on:keyup.esc=\"onUpdate\" v-on:keyup.enter=\"onUpdate\"/>\n  <span v-on:click=\"onEdit\" v-show='!(isEditable && isEditing)' >\n    <span v-if='value !== undefined && value !== null'>{{value}}</span>\n    <span v-else>{{text_placeholder}}</span>\n  </span>\n</div>\n\n";
 
 /***/ },
 /* 51 */
