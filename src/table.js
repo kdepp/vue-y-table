@@ -47,12 +47,12 @@ const inner = {
     <table :class="tableClass">
       <thead>
         <tr>
-          <th v-for="f in fields">{{f.label}}</th>
+          <th v-for="f in fields" :style="f.style || {}">{{f.label}}</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="d in data">
-          <td v-for="f in fields">
+          <td v-for="f in fields" :style="f.style || {}">
             <component
               :is="tcomponents[$index].cname"
               :options="tcomponents[$index].options"

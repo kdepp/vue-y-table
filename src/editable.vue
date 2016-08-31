@@ -8,7 +8,7 @@
   <input type="text" v-show='isEditable && isEditing' :placeholder='input_placeholder' v-model='value' lazy
         v-on:keyup.esc="onUpdate" v-on:keyup.enter="onUpdate"/>
   <span v-on:click="onEdit" v-show='!(isEditable && isEditing)' >
-    <span v-if='value && value.length'>{{value}}</span>
+    <span v-if='value !== undefined && value !== null'>{{value}}</span>
     <span v-else>{{text_placeholder}}</span>
   </span>
 </div>
