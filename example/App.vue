@@ -1,7 +1,15 @@
+<style>
+.fixed-table {
+  table-layout: fixed;
+  width: 500px;
+}
+</style>
+
 <template>
 <div>
   <h1>Y Table</h1>
   <y-table
+    table-class="fixed-table"
     :fields="fields"
     :tdata="tdata"
   ></y-table>
@@ -36,10 +44,11 @@ export default {
           onClick: function () {
             console.log(this.value);
           }
-        }
+        },
+        style: { width: '40%'}
       },
-      {key: 'first', label: 'first name'},
-      {key: 'sur',   label: '姓'}
+      {key: 'first', label: 'first name', style: { width: '20%' }},
+      {key: 'sur',   label: '姓', style: { width: '40%' }}
     ],
     tdata: [
       {_id: 1, first: 'Pratt', sur: 'John'},
